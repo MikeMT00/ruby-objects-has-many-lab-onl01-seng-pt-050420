@@ -1,37 +1,31 @@
 require 'pry'
-
 class Artist
 
-    attr_accessor :name, :all, :song
+  attr_accessor :name
 
-    @@all = []
+  @@song_count = 1
 
-    def initialize(name)
-        @name = name
-        @@all << self
-    end
+  def initialize(name)
+    @name = name
+  end
 
-    def self.all
-        @@all
-    end
+  def add_song(song)
+    song.artist = self
+    @@song_count += 1
+  end
 
-    def songs
-        Song.all.select {|s| s.artist == self}
-    end
+  def add_song_by_name(song_name)
+    song = Song.new(song_name)
+    add_song(song)
+    song.artist = self
+  end
 
-    def new_song(name, genre)
-        Song.new(name, self, genre)
-    end
+  def songs
+    Song.all.select {|song| song.artist == self}
+  end
 
-    def genres
-        songs = Song.all.select {|s| s.artist == self}
-        genres = []
-        songs.each do |song|
-            genres << song.genre
-        end
-        genres
-
-    end
-
+  def self.song_count
+    @@song_count
+  end
 
 end
